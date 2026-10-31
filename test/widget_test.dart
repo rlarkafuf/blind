@@ -52,7 +52,7 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
 
-      expect(find.text('Majlis'), findsOneWidget);
+      expect(find.text('Blind'), findsOneWidget);
     });
   });
 }

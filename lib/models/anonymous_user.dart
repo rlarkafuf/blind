@@ -38,6 +38,6 @@ class AnonymousUser {
     };
   }
 
-  /// Badge preview text e.g. "[ADNOC · Falcon-842]"
+  /// Badge preview text e.g. "[삼성전자 · 직급(선택)]"
   String get badgeLabel => '[${company.name} · $nickname]';
 }

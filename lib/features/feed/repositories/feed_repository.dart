@@ -16,6 +16,7 @@ abstract class FeedRepository {
     required AnonymousUser author,
   });
   Future<void> toggleLike(String postId);
+  Future<void> votePoll(String postId, String optionId);
   Future<List<Comment>> getComments(String postId);
   Future<Comment> createComment({
     required String postId,
@@ -374,6 +375,7 @@ class MockFeedRepository implements FeedRepository {
     return newPost;
   }
 
+
   @override
   Future<void> toggleLike(String postId) async {
     final index = _posts.indexWhere((p) => p.id == postId);
@@ -384,6 +386,26 @@ class MockFeedRepository implements FeedRepository {
       _posts[index] = p.copyWith(isLiked: newLiked, likeCount: newCount);
     }
   }
+
+  @override
+  Future<void> votePoll(String postId, String optionId) async {
+    final index = _posts.indexWhere((p) => p.id == postId);
+    if (index != -1) {
+      final p = _posts[index];
+      if (p.poll != null) {
+        final updatedOptions = p.poll!.options.map((opt) {
+          if (opt.id == optionId) {
+            return opt.copyWith(votes: opt.votes + 1);
+          }
+          return opt;
+        }).toList();
+
+        final updatedPoll = p.poll!.copyWith(options: updatedOptions);
+        _posts[index] = p.copyWith(poll: updatedPoll);
+      }
+    }
+  }
+
 
   @override
   Future<List<Comment>> getComments(String postId) async {
