@@ -106,6 +106,57 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
               ],
             ),
           ),
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        ref.read(authStateProvider.notifier).signOut();
+                        context.goNamed('feed');
+                      },
+                      child: const Text('로그아웃', style: TextStyle(color: AppColors.textPrimary)),
+                    ),
+                    const Text('|', style: TextStyle(color: AppColors.border)),
+                    TextButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('회원탈퇴'),
+                            content: const Text('정말로 탈퇴하시겠습니까?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('취소', style: TextStyle(color: AppColors.textPrimary)),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  ref.read(authStateProvider.notifier).deleteAccount();
+                                  context.goNamed('feed');
+                                },
+                                child: const Text('탈퇴하기', style: TextStyle(color: AppColors.error)),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      child: const Text('회원탈퇴', style: TextStyle(color: AppColors.textPrimary)),
+                    ),
+                  ],
+                ),
+                TextButton(
+                  onPressed: () {
+                    // Placeholder for privacy policy
+                  },
+                  child: const Text('개인정보 처리방침', style: TextStyle(color: AppColors.textMuted, decoration: TextDecoration.underline)),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

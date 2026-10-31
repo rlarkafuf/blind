@@ -59,6 +59,11 @@ class AuthNotifier extends Notifier<AsyncValue<AnonymousUser?>> {
     await repo.signOut();
     state = const AsyncValue.data(null);
   }
+
+  Future<void> deleteAccount() async {
+    // Mock delete account by clearing state (similar to signOut)
+    state = const AsyncValue.data(null);
+  }
 }
 
 final authStateProvider =

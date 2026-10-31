@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../auth/providers/auth_provider.dart';
+import '../../calculator/screens/calculator_screen.dart';
 import '../providers/feed_provider.dart';
 import '../widgets/channel_filter_bar.dart';
 import '../widgets/post_card.dart';
@@ -26,7 +27,7 @@ class _MainScreenState extends State<MainScreen> {
           const FeedScreen(),
           const Scaffold(body: Center(child: Text('채널 화면'))),
           const SizedBox(), // Placeholder for Write (handled via onTap)
-          const Scaffold(body: Center(child: Text('알림 화면'))),
+          const CalculatorScreen(),
           const Scaffold(body: Center(child: Text('마이페이지 화면'))),
         ],
       ),
@@ -47,7 +48,7 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: '홈'),
           BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: '채널'),
           BottomNavigationBarItem(icon: Icon(Icons.edit_square), label: '글쓰기'),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: '알림'),
+          BottomNavigationBarItem(icon: Icon(Icons.calculate), label: '계산기/비교'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: '마이페이지'),
         ],
       ),

@@ -19,7 +19,7 @@ void main() {
     expect(find.text('홈'), findsOneWidget);
     expect(find.text('채널'), findsOneWidget);
     expect(find.text('글쓰기'), findsOneWidget);
-    expect(find.text('알림'), findsOneWidget);
+      expect(find.text('계산기/비교'), findsOneWidget);
     expect(find.text('마이페이지'), findsOneWidget);
   });
 }

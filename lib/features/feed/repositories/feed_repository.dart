@@ -24,6 +24,9 @@ abstract class FeedRepository {
     required String content,
     required AnonymousUser author,
   });
+  Future<List<Post>> getMyPosts(String userId);
+  Future<List<Post>> getMyCommentedPosts(String userId);
+  Future<List<Post>> getMyLikedPosts(String userId);
 }
 
 /// Rich Mock Feed Repository with realistic UAE professional posts and comments.
@@ -302,6 +305,24 @@ class MockFeedRepository implements FeedRepository {
         ),
       ],
     };
+  }
+
+  @override
+  Future<List<Post>> getMyPosts(String userId) async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    return _posts.where((p) => p.userId == userId).toList();
+  }
+
+  @override
+  Future<List<Post>> getMyCommentedPosts(String userId) async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    return _posts.where((p) => p.userId == userId).toList();
+  }
+
+  @override
+  Future<List<Post>> getMyLikedPosts(String userId) async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    return _posts.where((p) => p.isLiked).toList();
   }
 
   @override
