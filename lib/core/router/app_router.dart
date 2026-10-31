@@ -4,6 +4,7 @@ import '../../features/create_post/screens/create_post_screen.dart';
 import '../../features/feed/screens/feed_screen.dart';
 import '../../features/post_detail/screens/post_detail_screen.dart';
 import '../../models/post.dart';
+import '../../features/profile/screens/profile_screen.dart';
 
 class AppRouter {
   AppRouter._();
@@ -14,7 +15,7 @@ class AppRouter {
       GoRoute(
         path: '/feed',
         name: 'feed',
-        builder: (context, state) => const FeedScreen(),
+        builder: (context, state) => const MainScreen(),
       ),
       GoRoute(
         path: '/onboarding',
@@ -37,6 +38,11 @@ class AppRouter {
             initialPost: post,
           );
         },
+      ),
+      GoRoute(
+        path: '/profile',
+        name: 'profile',
+        builder: (context, state) => const ProfileScreen(),
       ),
     ],
   );

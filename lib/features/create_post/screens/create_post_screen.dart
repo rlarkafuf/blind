@@ -190,7 +190,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
 
             channelsAsync.when(
               data: (channels) => DropdownButtonFormField<String>(
-                value: _selectedChannelId,
+                initialValue: _selectedChannelId,
                 dropdownColor: AppColors.surfaceElevated,
                 style: const TextStyle(color: AppColors.textPrimary),
                 decoration: const InputDecoration(

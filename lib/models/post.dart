@@ -1,5 +1,89 @@
 import 'package:flutter/foundation.dart';
 
+@immutable
+class PollOption {
+  final String id;
+  final String text;
+  final int votes;
+
+  const PollOption({
+    required this.id,
+    required this.text,
+    this.votes = 0,
+  });
+
+  PollOption copyWith({
+    String? id,
+    String? text,
+    int? votes,
+  }) {
+    return PollOption(
+      id: id ?? this.id,
+      text: text ?? this.text,
+      votes: votes ?? this.votes,
+    );
+  }
+
+  factory PollOption.fromJson(Map<String, dynamic> json) {
+    return PollOption(
+      id: json['id'] as String,
+      text: json['text'] as String,
+      votes: (json['votes'] as int?) ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'text': text,
+      'votes': votes,
+    };
+  }
+}
+
+@immutable
+class Poll {
+  final String id;
+  final String title;
+  final List<PollOption> options;
+
+  const Poll({
+    required this.id,
+    required this.title,
+    required this.options,
+  });
+
+  Poll copyWith({
+    String? id,
+    String? title,
+    List<PollOption>? options,
+  }) {
+    return Poll(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      options: options ?? this.options,
+    );
+  }
+
+  factory Poll.fromJson(Map<String, dynamic> json) {
+    return Poll(
+      id: json['id'] as String,
+      title: (json['title'] as String?) ?? '',
+      options: (json['options'] as List<dynamic>)
+          .map((e) => PollOption.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'options': options.map((e) => e.toJson()).toList(),
+    };
+  }
+}
+
 /// Represents an anonymous discussion post on Majlis.
 @immutable
 class Post {
@@ -18,6 +102,7 @@ class Post {
   final bool isPinned;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final Poll? poll;
 
   const Post({
     required this.id,
@@ -35,6 +120,7 @@ class Post {
     this.isPinned = false,
     required this.createdAt,
     required this.updatedAt,
+    this.poll,
   });
 
   Post copyWith({
@@ -53,6 +139,7 @@ class Post {
     bool? isPinned,
     DateTime? createdAt,
     DateTime? updatedAt,
+    Poll? poll,
   }) {
     return Post(
       id: id ?? this.id,
@@ -70,6 +157,7 @@ class Post {
       isPinned: isPinned ?? this.isPinned,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      poll: poll ?? this.poll,
     );
   }
 
@@ -90,6 +178,7 @@ class Post {
       isPinned: (json['is_pinned'] as bool?) ?? false,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
+      poll: json['poll'] != null ? Poll.fromJson(json['poll'] as Map<String, dynamic>) : null,
     );
   }
 
@@ -109,9 +198,10 @@ class Post {
       'is_pinned': isPinned,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
+      'poll': poll?.toJson(),
     };
   }
 
-  /// Formatted author badge label: "[ADNOC · Falcon-491]"
+  /// Formatted author badge label: "[회사명 · 닉네임]"
   String get authorBadge => '[$companyNameSnapshot · $authorNickname]';
 }

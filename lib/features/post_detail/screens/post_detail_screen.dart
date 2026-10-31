@@ -6,6 +6,7 @@ import '../../../models/comment.dart';
 import '../../../models/post.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../feed/providers/feed_provider.dart';
+import '../utils/anonymous_mapping.dart';
 import '../widgets/comment_tile.dart';
 
 class PostDetailScreen extends ConsumerStatefulWidget {
@@ -99,6 +100,19 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
         );
       }
     }
+  }
+
+
+
+
+
+  void _handleVote(String optionId) async {
+    final repo = ref.read(feedRepositoryProvider);
+    await repo.votePoll(widget.postId, optionId);
+    final updatedPost = await repo.getPostById(widget.postId);
+    setState(() {
+      _post = updatedPost;
+    });
   }
 
   @override
@@ -206,6 +220,93 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                       height: 1.6,
                     ),
                   ),
+
+                  // Poll UI
+                  if (post.poll != null) ...[
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.border),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            post.poll!.title,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          ...post.poll!.options.map((option) {
+                            final totalVotes = post.poll!.options.fold(0, (sum, opt) => sum + opt.votes);
+                            final percent = totalVotes == 0 ? 0.0 : option.votes / totalVotes;
+
+                            return GestureDetector(
+                              onTap: () => _handleVote(option.id),
+                              child: Container(
+                                margin: const EdgeInsets.only(bottom: 8),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      height: 40,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.surfaceElevated,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    FractionallySizedBox(
+                                      widthFactor: percent,
+                                      child: Container(
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          color: AppColors.uaeEmerald.withValues(alpha: 0.2),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned.fill(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              option.text,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                color: AppColors.textPrimary,
+                                              ),
+                                            ),
+                                            Text(
+                                              '${(percent * 100).toStringAsFixed(1)}%',
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                                color: AppColors.textSecondary,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                          const SizedBox(height: 8),
+                          Text(
+                            '총 ${post.poll!.options.fold(0, (sum, opt) => sum + opt.votes)}명 참여',
+                            style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
+                          )
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                  ],
                   const SizedBox(height: 20),
 
                   // Engagement Counter Bar
@@ -310,17 +411,22 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                           padding: EdgeInsets.symmetric(vertical: 24.0),
                           child: Center(
                             child: Text(
-                              'No comments yet. Share your anonymous thoughts below!',
+                              '등록된 댓글이 없습니다.',
                               style: TextStyle(color: AppColors.textMuted, fontSize: 13),
                             ),
                           ),
                         );
                       }
 
+                      final anonMapping = AnonymousMappingUtils.buildAnonymousMapping(comments, post.authorNickname);
+
                       return Column(
                         children: comments.map((comment) {
+                          final mappedComment = comment.copyWith(
+                            authorNickname: anonMapping[comment.authorNickname] ?? comment.authorNickname
+                          );
                           return CommentTile(
-                            comment: comment,
+                            comment: mappedComment,
                             onReplyTap: (target) {
                               setState(() {
                                 _replyTarget = target;
