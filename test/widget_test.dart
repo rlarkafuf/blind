@@ -16,23 +16,23 @@ void main() {
       expect(hash1.length, equals(64)); // SHA-256 64 hex characters
     });
 
-    test('Company domain resolution accurately maps UAE enterprises', () {
+    test('Company domain resolution accurately maps Korean enterprises', () {
       final repo = CompanyRepository();
 
-      final adnoc = repo.resolveCompanyByEmail('executive@adnoc.ae');
-      expect(adnoc.name, equals('ADNOC'));
-      expect(adnoc.isVerifiedEntity, isTrue);
+      final samsung = repo.resolveCompanyByEmail('executive@samsung.com');
+      expect(samsung.name, equals('삼성전자'));
+      expect(samsung.isVerifiedEntity, isTrue);
 
-      final emirates = repo.resolveCompanyByEmail('crew@emirates.com');
-      expect(emirates.name, equals('Emirates Airline'));
-      expect(emirates.isVerifiedEntity, isTrue);
+      final kakao = repo.resolveCompanyByEmail('developer@kakaocorp.com');
+      expect(kakao.name, equals('카카오'));
+      expect(kakao.isVerifiedEntity, isTrue);
 
       final unknown = repo.resolveCompanyByEmail('user@gmail.com');
-      expect(unknown.name, equals('General / Job Seeker'));
+      expect(unknown.name, equals('새회사'));
       expect(unknown.isVerifiedEntity, isFalse);
     });
 
-    test('UAE anonymous handle generator formats properly', () {
+    test('Anonymous handle generator formats properly', () {
       final handle = AnonymityHelper.generateAnonymousNickname();
       expect(handle.contains('-'), isTrue);
       final parts = handle.split('-');

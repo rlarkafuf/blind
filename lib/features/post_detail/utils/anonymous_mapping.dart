@@ -8,7 +8,7 @@ class AnonymousMappingUtils {
     void traverse(List<Comment> cList) {
       for (var c in cList) {
         if (c.authorNickname == postAuthorNickname) {
-          mapping[c.authorNickname] = '글쓴이';
+          mapping[c.authorNickname] = '작성자';
         } else if (!mapping.containsKey(c.authorNickname)) {
           mapping[c.authorNickname] = '익명$anonCount';
           anonCount++;

@@ -46,10 +46,10 @@ class _MainScreenState extends State<MainScreen> {
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: '홈'),
-          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: '채널'),
-          BottomNavigationBarItem(icon: Icon(Icons.edit_square), label: '글쓰기'),
-          BottomNavigationBarItem(icon: Icon(Icons.calculate), label: '계산기/비교'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: '마이페이지'),
+          BottomNavigationBarItem(icon: Icon(Icons.domain), label: '우리회사'),
+          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: '토픽'),
+          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: '알림'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: '마이'),
         ],
       ),
     );
