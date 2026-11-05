@@ -59,7 +59,7 @@ void main() {
 
       final mapping = AnonymousMappingUtils.buildAnonymousMapping(comments, postAuthorNickname);
 
-      expect(mapping['Author-123'], '글쓴이');
+      expect(mapping['Author-123'], '작성자');
       expect(mapping['Random-456'], '익명1');
       expect(mapping['Another-789'], '익명2');
     });
